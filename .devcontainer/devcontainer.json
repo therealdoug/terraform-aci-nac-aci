@@ -1,0 +1,9 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/yamllint:2": {
+      "version": "1.28.0"
+    },
+    "ghcr.io/devcontainers-contrib/features/pre-commit:2": {}
+  }
+}
