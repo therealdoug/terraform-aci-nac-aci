@@ -26,7 +26,7 @@ resource "aci_rest_managed" "macsecKeyPol" {
     ignore_changes = [content["startTime"], content["preSharedKey"]]
   }
 
-  depends_on = [ 
+  depends_on = [
     aci_rest_managed.macsecKeyChainPol
-    ]
+  ]
 }

@@ -10,13 +10,13 @@ variable "name" {
 
 variable "admin_state" {
   description = "The administrative state of the MACsec Interface Policy"
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 
 variable "macsec_parameters_policy" {
   description = "MACsec Parameters Policy Name"
-  type = string
+  type        = string
 
   validation {
     condition     = can(regex("^[a-zA-Z0-9_.:-]{0,64}$", var.macsec_parameters_policy))
@@ -26,8 +26,8 @@ variable "macsec_parameters_policy" {
 
 variable "macsec_keychain_policy" {
   description = "MACsec KeyChain Policy Name"
-  type = string
-  
+  type        = string
+
   validation {
     condition     = can(regex("^[a-zA-Z0-9_.:-]{0,64}$", var.macsec_keychain_policy))
     error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 64."
