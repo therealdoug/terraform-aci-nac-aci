@@ -49,7 +49,7 @@ module "aci_macsec_parameters_policy" {
 | <a name="input_key_server_priority"></a> [key\_server\_priority](#input\_key\_server\_priority) | Key Server Priority. Minimum value: `0`. Maximum value: `255`. Default: `16` | `number` | `16` | no |
 | <a name="input_window_size"></a> [window\_size](#input\_window\_size) | Replay Protection Window Size. Minimum value: `0`. Maximum value `4294967295`. Default: `64` | `number` | `64` | no |
 | <a name="input_key_expiry_time"></a> [key\_expiry\_time](#input\_key\_expiry\_time) | SAK Expiry Time (in seconds). Values are `0` (disabled); or Minimum value `60`, Maximum value `2592000` | `number` | `0` | no |
-| <a name="input_security_policy"></a> [security\_policy](#input\_security\_policy) | Security Policy. Choices are: `must-secure` or `should-secure`. | `string` | n/a | yes |
+| <a name="input_security_policy"></a> [security\_policy](#input\_security\_policy) | Security Policy. Choices are: `must-secure` or `should-secure`. | `string` | `"should-secure"` | no |
 
 ## Outputs
 
