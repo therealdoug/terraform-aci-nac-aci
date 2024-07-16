@@ -76,6 +76,7 @@ variable "key_expiry_time" {
 variable "security_policy" {
   description = "Security Policy. Choices are: `must-secure` or `should-secure`."
   type        = string
+  default = "should-secure"
 
   validation {
     condition     = contains(["should-secure", "must-secure"], var.security_policy)
