@@ -1,5 +1,5 @@
 module "aci_macsec_parameters_policy" {
-  source = "netascode/nac-aci/aci//modules/terraform-aci-macsec-parameters-policy"
+  source  = "netascode/nac-aci/aci//modules/terraform-aci-macsec-parameters-policy"
   version = ">= 0.8.0"
 
   name          = "macsecparam1"
