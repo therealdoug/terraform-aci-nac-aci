@@ -307,7 +307,6 @@ module "aci_macsec_parameters_policy" {
   for_each               = { for mpp in try(local.access_policies.interface_policies.macsec_parameters_policies, []) : mpp.name => mpp if local.modules.aci_macsec_parameters_policy && var.manage_access_policies }
   name                   = "${each.value.name}${local.defaults.apic.access_policies.interface_policies.macsec_parameters_policies.name_suffix}"
   description            = try(each.value.description, "")
-  admin_state            = try(each.value.admin_state, local.defaults.apic.access_policies.interface_policies.macsec_parameters_policies.admin_state)
   cipher_suite           = try(each.value.cipher_suite, local.defaults.apic.access_policies.interface_policies.macsec_parameters_policies.cipher_suite)
   key_server_priority    = try(each.value.key_server_priority, local.defaults.apic.access_policies.interface_policies.macsec_parameters_policies.key_server_priority)
   window_size            = try(each.value.window_size, local.defaults.apic.access_policies.interface_policies.macsec_parameters_policies.window_size)
