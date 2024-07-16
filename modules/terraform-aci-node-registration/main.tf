@@ -5,7 +5,6 @@ resource "aci_rest_managed" "fabricNodeIdentP" {
     name      = var.name
     serial    = var.serial_number
     nodeId    = var.node_id
-    role      = var.role
     nodeType  = var.type
     podId     = var.pod_id
     extPoolId = var.type == "remote-leaf-wan" ? var.remote_pool_id : null
