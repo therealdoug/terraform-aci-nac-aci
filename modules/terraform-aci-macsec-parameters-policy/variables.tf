@@ -18,12 +18,6 @@ variable "description" {
   }
 }
 
-variable "admin_state" {
-  description = "Administrative state of MACsec Parameter Policy."
-  type        = bool
-  default     = true
-}
-
 variable "cipher_suite" {
   description = "Ciper Suite. Choices: `gcm-aes-128`, `gcm-aes-128`, `gcm-aes-xpn-128`, `gcm-aes-xpn-256`.  Deafult is `gcm-aes-xpn-256`."
   type        = string
