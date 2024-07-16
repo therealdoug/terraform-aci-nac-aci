@@ -13,7 +13,7 @@ content: |-
   ## Examples
 
   ```hcl
-  {{ include "./examples/complete/main.tf" }}
+  {{ include "./main.tf" }}
   ```
 
   {{ .Requirements }}
