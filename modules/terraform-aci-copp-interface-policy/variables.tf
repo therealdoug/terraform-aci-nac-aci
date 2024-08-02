@@ -51,8 +51,8 @@ variable "protocol_policies" {
     error_message = "Allowed Values: A number between 10 and 4,398,046,510,080."
   }
 
-  validation {
-    condition     = alltrue([for pp in var.match_protocols : contains(["icmp", "arp", "stp", "lldp", "bgp", "ospf", "bfd", "lacp", "cdp"], pp)])
-    error_message = "Allowed Values: `icmp`, `arp`, `stp`, `lldp`, `bgp`, `ospf`, `bfd`, `lacp`, `cdp`."
-  }
+  # validation {
+  #   condition     = alltrue([for pp in var.match_protocols : contains(["icmp", "arp", "stp", "lldp", "bgp", "ospf", "bfd", "lacp", "cdp"], pp)])
+  #   error_message = "Allowed Values: `icmp`, `arp`, `stp`, `lldp`, `bgp`, `ospf`, `bfd`, `lacp`, `cdp`."
+  # }
 }
