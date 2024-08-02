@@ -273,6 +273,15 @@ module "aci_access_spine_switch_configuration" {
   ]
 }
 
+module "aci_copp_interface_policy" {
+  source = "./modules/terraform-aci-copp-interface-policy"
+
+  for_each        = { for copp in try(local.access_policies.interface_policies.copp_policies, []) : copp.name => copp if local.modules.aci_copp_interface_policy && var.manage_access_policies }
+  name            = try(each.value.name, local.defaults.apic.access_policies.interface_policies.copp_policies.name_suffix)
+  description     = try(each.value.description, "")
+  match_protocols = try(each.value.match_protocols, [])
+}
+
 module "aci_cdp_policy" {
   source = "./modules/terraform-aci-cdp-policy"
 
@@ -390,6 +399,7 @@ module "aci_access_leaf_interface_policy_group" {
   map                        = try(each.value.map, local.defaults.apic.access_policies.leaf_interface_policy_groups.map)
   link_level_policy          = try("${each.value.link_level_policy}${local.defaults.apic.access_policies.interface_policies.link_level_policies.name_suffix}", "")
   cdp_policy                 = try("${each.value.cdp_policy}${local.defaults.apic.access_policies.interface_policies.cdp_policies.name_suffix}", "")
+  copp_policy                = try("${each.value.copp_policy}${local.defaults.apic.access_policies.interface_policies.copp_policies.name_suffix}", "")
   lldp_policy                = try("${each.value.lldp_policy}${local.defaults.apic.access_policies.interface_policies.lldp_policies.name_suffix}", "")
   spanning_tree_policy       = try("${each.value.spanning_tree_policy}${local.defaults.apic.access_policies.interface_policies.spanning_tree_policies.name_suffix}", "")
   mcp_policy                 = try("${each.value.mcp_policy}${local.defaults.apic.access_policies.interface_policies.mcp_policies.name_suffix}", "")
@@ -406,6 +416,7 @@ module "aci_access_leaf_interface_policy_group" {
   depends_on = [
     module.aci_link_level_policy,
     module.aci_cdp_policy,
+    module.aci_copp_policy,
     module.aci_lldp_policy,
     module.aci_spanning_tree_policy,
     module.aci_mcp_policy,

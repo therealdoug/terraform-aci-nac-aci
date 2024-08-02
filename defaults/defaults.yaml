@@ -482,6 +482,11 @@ defaults:
           node_blocks:
             name_suffix: ""
       interface_policies:
+        copp_policies:
+          name_suffix: ""
+          rate: 10
+          burst: 10
+          match_protocols: ""
         cdp_policies:
           name_suffix: ""
         lldp_policies:
