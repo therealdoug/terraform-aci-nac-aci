@@ -162,6 +162,11 @@ repos:
       - id: terraform-docs-system
         args: ["./modules/terraform-aci-coop-policy/examples/complete"]
       - id: terraform-docs-system
+      - id: terraform-docs-system
+        args: ["./modules/terraform-aci-copp-policy"]
+      - id: terraform-docs-system
+        args: ["./modules/terraform-aci-copp-policy/examples/complete"]
+      - id: terraform-docs-system
         args: ["./modules/terraform-aci-date-time-format"]
       - id: terraform-docs-system
         args: ["./modules/terraform-aci-date-time-format/examples/complete"]

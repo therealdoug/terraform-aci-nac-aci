@@ -273,13 +273,28 @@ module "aci_access_spine_switch_configuration" {
   ]
 }
 
+locals {
+  copp = flatten([
+    for pol in try(local.access_policies.interface_policies.copp_policies, []) : {
+      name        = "${pol.name}${local.defaults.apic.access_policies.interface_policies.copp_policies.name_suffix}"
+      description = try("${pol.description}", "")
+      protocol_policies = [for pp in try(pol.protocol_policies, []) : {
+        name            = "${pp.name}${local.defaults.apic.access_policies.interface_policies.copp_policies.name_suffix}"
+        rate            = try("${pp.rate}", "${local.defaults.apic.access_policies.interface_policies.copp_policies.rate}")
+        burst           = try("${pp.burst}", "${local.defaults.apic.access_policies.interface_policies.copp_policies.burst}")
+        match_protocols = try(pp.match_protocols, null)
+      }]
+    }
+  ])
+}
+
 module "aci_copp_interface_policy" {
   source = "./modules/terraform-aci-copp-interface-policy"
 
-  for_each        = { for copp in try(local.access_policies.interface_policies.copp_policies, []) : copp.name => copp if local.modules.aci_copp_interface_policy && var.manage_access_policies }
-  name            = try(each.value.name, local.defaults.apic.access_policies.interface_policies.copp_policies.name_suffix)
-  description     = try(each.value.description, "")
-  match_protocols = try(each.value.match_protocols, [])
+  for_each          = { for copp in try(local.copp, []) : copp.name => copp if local.modules.aci_copp_interface_policy && var.manage_access_policies }
+  name              = each.value.name
+  description       = each.value.description
+  protocol_policies = each.value.protocol_policies
 }
 
 module "aci_cdp_policy" {
@@ -416,7 +431,7 @@ module "aci_access_leaf_interface_policy_group" {
   depends_on = [
     module.aci_link_level_policy,
     module.aci_cdp_policy,
-    module.aci_copp_policy,
+    module.aci_copp_interface_policy,
     module.aci_lldp_policy,
     module.aci_spanning_tree_policy,
     module.aci_mcp_policy,

@@ -32,7 +32,7 @@ resource "aci_rest_managed" "infraRsCoppIfPol" {
   dn         = "${aci_rest_managed.infraAccGrp.dn}/rscoppIfPol"
   class_name = "infraRsCoppIfPol"
   content = {
-    tnCdpIfPolName = var.copp_policy
+    tnCoppIfPolName = var.copp_policy
   }
 }
 
