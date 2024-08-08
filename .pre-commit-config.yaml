@@ -70,6 +70,10 @@ repos:
       - id: terraform-docs-system
         args: ["./modules/terraform-aci-access-span-source-group/examples/complete"]
       - id: terraform-docs-system
+        args: ["./modules/terraform-aci-access-spine-copp-policy"]
+      - id: terraform-docs-system
+        args: ["./modules/terraform-aci-access-spine-copp-policy/examples/complete"]
+      - id: terraform-docs-system
         args: ["./modules/terraform-aci-access-spine-interface-policy-group"]
       - id: terraform-docs-system
         args: ["./modules/terraform-aci-access-spine-interface-policy-group/examples/complete"]
