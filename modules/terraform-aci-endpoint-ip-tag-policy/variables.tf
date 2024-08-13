@@ -1,22 +1,6 @@
-variable "mac" {
-  description = "MAC address. Format: `12:34:56:78:9A:BC`."
+variable "ip" {
+  description = "IP address."
   type        = string
-  default     = "00:22:BD:F8:19:FF"
-
-  validation {
-    condition     = can(regex("^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$", var.mac))
-    error_message = "Format: `12:34:56:78:9A:BC`."
-  }
-}
-
-variable "bridge_domain" {
-  description = "Bridge domain name."
-  type        = string
-
-  validation {
-    condition     = var.bridge_domain == "*" || can(regex("^[a-zA-Z0-9_.:-]{0,64}$", var.bridge_domain))
-    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 64."
-  }
 }
 
 variable "tenant" {
@@ -60,28 +44,5 @@ variable "tags" {
       for tag in coalesce(var.tags, []) : can(regex("^[a-zA-Z0-9_.:-]{0,64}$", tag.value))
     ])
     error_message = "`tags.value`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 64."
-  }
-}
-
-variable "annotations" {
-  description = "Annotation Tags"
-  type = list(object({
-    key = string
-    value = string
-  }))
-  default = []
-
-  validation {
-    condition = alltrue([
-      for tag in coalesce(var.annotations, []) : can(regex("^[a-zA-Z0-9_.:-]{0,64}$", tag.key))
-    ])
-    error_message = "`annotations.key`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 64."
-  }
-
-  validation {
-    condition = alltrue([
-      for tag in coalesce(var.annotations, []) : can(regex("^[a-zA-Z0-9_.:-]{0,64}$", tag.value))
-    ])
-    error_message = "`annotations.value`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 64."
   }
 }

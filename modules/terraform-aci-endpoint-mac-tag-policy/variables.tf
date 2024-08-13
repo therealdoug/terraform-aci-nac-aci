@@ -62,26 +62,3 @@ variable "tags" {
     error_message = "`tags.value`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 64."
   }
 }
-
-variable "annotations" {
-  description = "Annotation Tags"
-  type = list(object({
-    key = string
-    value = string
-  }))
-  default = []
-
-  validation {
-    condition = alltrue([
-      for tag in coalesce(var.annotations, []) : can(regex("^[a-zA-Z0-9_.:-]{0,64}$", tag.key))
-    ])
-    error_message = "`annotations.key`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 64."
-  }
-
-  validation {
-    condition = alltrue([
-      for tag in coalesce(var.annotations, []) : can(regex("^[a-zA-Z0-9_.:-]{0,64}$", tag.value))
-    ])
-    error_message = "`annotations.value`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 64."
-  }
-}
