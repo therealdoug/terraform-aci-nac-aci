@@ -3,7 +3,7 @@ resource "aci_rest_managed" "fvEpMacTag" {
   class_name = "fvEpMacTag"
 
   content = {
-    mac     = var.mac
+    mac = var.mac
     # bdName  = var.bridge_domain == "all" ? "*" : var.bridge_domain
     bdName  = var.bridge_domain
     ctxName = var.bridge_domain == "*" ? var.vrf : null

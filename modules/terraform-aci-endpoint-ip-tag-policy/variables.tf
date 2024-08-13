@@ -5,7 +5,7 @@ variable "ip" {
 
 variable "tenant" {
   description = "Tenant Name."
-  type = string
+  type        = string
 
   validation {
     condition     = can(regex("^[a-zA-Z0-9_.:-]{0,64}$", var.tenant))
@@ -15,8 +15,8 @@ variable "tenant" {
 
 variable "vrf" {
   description = "VRF Name."
-  type = string
-  default = null
+  type        = string
+  default     = null
 
   validation {
     condition     = var.vrf == null || can(regex("^[a-zA-Z0-9_.:-]{0,64}$", var.vrf))
@@ -27,7 +27,7 @@ variable "vrf" {
 variable "tags" {
   description = "Policy Tags"
   type = list(object({
-    key = string
+    key   = string
     value = string
   }))
   default = []
