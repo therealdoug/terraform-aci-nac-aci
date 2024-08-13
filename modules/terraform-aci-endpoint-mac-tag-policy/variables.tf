@@ -59,6 +59,6 @@ variable "tags" {
     condition = alltrue([
       for tag in coalesce(var.tags, []) : can(regex("^[a-zA-Z0-9_.:-]{0,128}$", tag.value))
     ])
-    error_message = "`tags.value`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 64."
+    error_message = "`tags.value`: Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 128."
   }
 }
