@@ -3510,6 +3510,8 @@ locals {
       mac           = upper(policy.mac)
       bridge_domain = policy.bridge_domain == "all" ? "*" : policy.bridge_domain
       vrf           = policy.bridge_domain == "all" ? policy.vrf : null
+      tags          = try(policy.tags, [])
+      annotations   = try(policy.annotations, [])
     }
   ]
  ])
@@ -3518,9 +3520,45 @@ locals {
 module "aci_endpoint_mac_tag_policy" {
   source = "./modules/terraform-aci-endpoint-mac-tag-policy"
 
-  for_each      = { for pol in local.ep_mac_tags : member.key => member if local.modules.aci_endpoint_mac_tag_policy && var.manage_tenants }
-  tenant        = pol.tenant
-  mac           = pol.mac
-  bridge_domain = pol.bridge_domain
-  vrf           = pol.vrf
+  for_each      = { for pol in local.ep_mac_tags : pol.key => pol if local.modules.aci_endpoint_mac_tag_policy && var.manage_tenants }
+  tenant        = each.value.tenant
+  mac           = each.value.mac
+  bridge_domain = each.value.bridge_domain
+  vrf           = try(each.value.vrf,null)
+  tags          = each.value.tags
+  annotations   = each.value.annotations
+
+  depends_on = [
+    module.aci_tenant
+  ]
+}
+
+locals {
+ ep_ip_tags = flatten([
+  for tenant in local.tenants : [
+    for policy in try(tenant.policies.endpoint_mac_tags, []) : {
+      key           = format("%s/%s%s", tenant.name, policy.vrf, policy.ip)
+      tenant        = tenant.name
+      ip            = policy.ip
+      vrf           = policy.vrf
+      tags          = try(policy.tags, [])
+      annotations   = try(policy.annotations, [])
+    }
+  ]
+ ])
+}
+
+module "aci_endpoint_ip_tag_policy" {
+  source = "./modules/terraform-aci-endpoint-ip-tag-policy"
+
+  for_each      = { for pol in local.ep_ip_tags : pol.key => pol if local.modules.aci_endpoint_ip_tag_policy && var.manage_tenants }
+  tenant        = each.value.tenant
+  ip            = each.value.ip
+  vrf           = each.value.vrf
+  tags          = each.value.tags
+  annotations   = each.value.annotations
+
+  depends_on = [
+    module.aci_tenant
+  ]
 }
