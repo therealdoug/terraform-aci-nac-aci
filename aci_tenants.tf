@@ -3500,3 +3500,27 @@ module "aci_track_member" {
   scope          = each.value.scope
   ip_sla_policy  = each.value.ip_sla_policy
 }
+
+locals {
+ ep_mac_tags = flatten([
+  for tenant in local.tenants : [
+    for policy in try(tenant.policies.endpoint_mac_tags, []) : {
+      key           = format("%s/%s%s", tenant.name, policy.mac, policy.bridge_domain)
+      tenant        = tenant.name
+      mac           = upper(policy.mac)
+      bridge_domain = policy.bridge_domain == "all" ? "*" : policy.bridge_domain
+      vrf           = policy.bridge_domain == "all" ? policy.vrf : null
+    }
+  ]
+ ])
+}
+
+module "aci_endpoint_mac_tag_policy" {
+  source = "./modules/terraform-aci-endpoint-mac-tag-policy"
+
+  for_each      = { for pol in local.ep_mac_tags : member.key => member if local.modules.aci_endpoint_mac_tag_policy && var.manage_tenants }
+  tenant        = pol.tenant
+  mac           = pol.mac
+  bridge_domain = pol.bridge_domain
+  vrf           = pol.vrf
+}

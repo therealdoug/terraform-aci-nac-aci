@@ -1394,6 +1394,10 @@ defaults:
           percentage_down: 1
           weight_up: 0
           weight_down: 1
+        endpoint_mac_tag_policies:
+          name_suffix: ""
+        endpoint_ip_tag_policies:
+          name_suffix: ""
       services:
         l4l7_devices:
           name_suffix: ""
