@@ -414,6 +414,25 @@ locals {
             from            = try(ap.from, "")
             to              = try(ap.to, "")
           }]
+          provided_epg_labels = [for label in try(epg.provided_epg_labels,[]) : {
+            name = label.name
+            tag = label.tag
+            is_complement = try(label.is_complement,"false")
+          }]
+          consumed_epg_labels = [for label in try(epg.consumed_epg_labels,[]) : {
+            name = label.name
+            tag = label.tag
+          }]
+          provided_subject_labels = [for label in try(epg.provided_subject_labels,[]) : {
+            name = label.name
+            tag = label.tag
+            is_complement = try(label.is_complement,"false")
+          }]
+          consumed_subject_labels = [for label in try(epg.consumed_subject_labels,[]) : {
+            name = label.name
+            tag = label.tag
+            is_complement = try(label.is_complement,"false")
+          }]
         }
       ]
     ]
@@ -490,6 +509,8 @@ module "aci_endpoint_group" {
   }]
   l4l7_virtual_ips   = each.value.l4l7_virtual_ips
   l4l7_address_pools = each.value.l4l7_address_pools
+  provided_epg_labels = each.value.provided_epg_labels
+  consumed_epg_labels = each.value.consumed_epg_labels
 
   depends_on = [
     module.aci_tenant,
