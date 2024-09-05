@@ -97,8 +97,8 @@ modules:
   aci_maintenance_group: true
   aci_management_access_policy: true
   aci_match_rule: true
-  aci_mcp: true
-  aci_mcp_policy: true
+  aci_mcp: false
+  aci_mcp_policy: false
   aci_monitoring_policy: true
   aci_mpls_custom_qos_policy: true
   aci_mst_policy: true

@@ -1863,6 +1863,16 @@ locals {
             log      = try(filter.log, local.defaults.apic.tenants.contracts.subjects.filters.log)
             no_stats = try(filter.no_stats, local.defaults.apic.tenants.contracts.subjects.filters.no_stats)
           }]
+          provided_filters = [for label in try(subject.provided_labels, {}) : {
+            name = label.name
+            tag = label.tag
+            is_complement = try(label.is_complement,false)
+          }]
+          consumed_filters = [for label in try(subject.consumed_labels, {}) : {
+            name = label.name
+            tag = label.tag
+            is_complement = try(label.is_complement,false)
+          }]
         }]
       }
     ]
