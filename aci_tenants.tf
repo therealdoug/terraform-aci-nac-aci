@@ -426,12 +426,10 @@ locals {
           provided_subject_labels = [for label in try(epg.provided_subject_labels,[]) : {
             name = label.name
             tag = label.tag
-            is_complement = try(label.is_complement,"false")
           }]
           consumed_subject_labels = [for label in try(epg.consumed_subject_labels,[]) : {
             name = label.name
             tag = label.tag
-            is_complement = try(label.is_complement,"false")
           }]
         }
       ]
@@ -511,6 +509,8 @@ module "aci_endpoint_group" {
   l4l7_address_pools = each.value.l4l7_address_pools
   provided_epg_labels = each.value.provided_epg_labels
   consumed_epg_labels = each.value.consumed_epg_labels
+  provided_subject_labels = each.value.provided_subject_labels
+  consumed_subject_labels = each.value.consumed_subject_labels
 
   depends_on = [
     module.aci_tenant,
@@ -603,6 +603,23 @@ locals {
             from            = try(ap.from, "")
             to              = try(ap.to, "")
           }]
+          provided_useg_epg_labels = [for label in try(useg_epg.provided_useg_epg_labels,[]) : {
+            name = label.name
+            tag = label.tag
+            is_complement = try(label.is_complement,"false")
+          }]
+          consumed_useg_epg_labels = [for label in try(useg_epg.consumed_useg_epg_labels,[]) : {
+            name = label.name
+            tag = label.tag
+          }]
+          provided_subject_labels = [for label in try(useg_epg.provided_subject_labels,[]) : {
+            name = label.name
+            tag = label.tag
+          }]
+          consumed_subject_labels = [for label in try(useg_epg.consumed_subject_labels,[]) : {
+            name = label.name
+            tag = label.tag
+          }]
         }
       ]
     ]
@@ -642,6 +659,10 @@ module "aci_useg_endpoint_group" {
     node_id = sl.node_id
   }]
   l4l7_address_pools = each.value.l4l7_address_pools
+  provided_useg_epg_labels = each.value.provided_useg_epg_labels
+  consumed_useg_epg_labels = each.value.consumed_useg_epg_labels
+  provided_subject_labels = each.value.provided_subject_labels
+  consumed_subject_labels = each.value.consumed_subject_labels
 
   depends_on = [
     module.aci_tenant,
@@ -693,6 +714,23 @@ locals {
             value       = sel.value
             description = try(sel.description, "")
           }]
+          provided_esg_labels = [for label in try(esg.provided_esg_labels,[]) : {
+            name = label.name
+            tag = label.tag
+            is_complement = try(label.is_complement,"false")
+          }]
+          consumed_esg_labels = [for label in try(esg.consumed_esg_labels,[]) : {
+            name = label.name
+            tag = label.tag
+          }]
+          provided_subject_labels = [for label in try(esg.provided_subject_labels,[]) : {
+            name = label.name
+            tag = label.tag
+          }]
+          consumed_subject_labels = [for label in try(esg.consumed_subject_labels,[]) : {
+            name = label.name
+            tag = label.tag
+          }]
         }
       ]
     ]
@@ -719,6 +757,10 @@ module "aci_endpoint_security_group" {
   tag_selectors               = each.value.tag_selectors
   epg_selectors               = each.value.epg_selectors
   ip_subnet_selectors         = each.value.ip_subnet_selectors
+  provided_esg_labels = each.value.provided_esg_labels
+  consumed_esg_labels = each.value.consumed_esg_labels
+  provided_subject_labels = each.value.provided_subject_labels
+  consumed_subject_labels = each.value.consumed_subject_labels
 
   depends_on = [
     module.aci_tenant,

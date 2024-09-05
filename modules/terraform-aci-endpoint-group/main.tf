@@ -520,7 +520,7 @@ resource "aci_rest_managed" "vzConsLbl" {
 }
 
 resource "aci_rest_managed" "vzProvSubjLbl" {
-  for_each = { for label in var.provided_epg_labels : label.name => label }
+  for_each = { for label in var.provided_subject_labels : label.name => label }
   dn = "${aci_rest_managed.fvAEPg.dn}/provsubjlbl-${each.value.name}"
   class_name = "vzProvSubjLbl"
   content = {
@@ -531,12 +531,11 @@ resource "aci_rest_managed" "vzProvSubjLbl" {
 }
 
 resource "aci_rest_managed" "vzConsSubjLbl" {
-  for_each = { for label in var.consumed_epg_labels : label.name => label }
+  for_each = { for label in var.consumed_subject_labels : label.name => label }
   dn = "${aci_rest_managed.fvAEPg.dn}/conssubjlbl-${each.value.name}"
   class_name = "vzConsSubjLbl"
   content = {
     name = each.value.name
     tag = each.value.tag
-    isComplement = each.value.is_complement == true ? "yes" : "no"
   }
 }
