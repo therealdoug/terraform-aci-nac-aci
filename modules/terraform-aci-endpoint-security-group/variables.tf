@@ -256,7 +256,6 @@ variable "provided_subject_labels" {
   type = list(object({
     name          = string
     tag           = string
-    is_complement = optional(bool, false)
   }))
   default = []
 

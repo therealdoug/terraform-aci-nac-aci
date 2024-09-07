@@ -38,6 +38,8 @@ resource "aci_rest_managed" "vzSubj" {
     revFltPorts = "yes"
     prio        = each.value.qos_class
     targetDscp  = each.value.target_dscp
+    consMatchT  = each.value.consumed_label_match
+    provMatchT  = each.value.provided_label_match
   }
 }
 
@@ -59,5 +61,70 @@ resource "aci_rest_managed" "vzRsSubjGraphAtt" {
   class_name = "vzRsSubjGraphAtt"
   content = {
     tnVnsAbsGraphName = each.value.service_graph
+  }
+}
+
+# locals {
+#   subj_filter_list = flatten([
+#     for subj in var.subjects : [
+#       for flt in coalesce(subj.filters, []) : {
+#         id         = "${subj.name}-${flt.filter}"
+#         subj       = subj.name
+#         filter     = flt.filter
+#         action     = flt.action
+#         directives = join(",", concat(flt.log == true ? ["log"] : [], flt.no_stats == true ? ["no_stats"] : []))
+#         priority   = flt.priority
+#       }
+#     ]
+#   ])
+# }
+
+locals {
+  provided_labels_list = flatten([
+    for subj in var.subjects : [
+      for label in coalesce(subj.provided_labels, []) : {
+        subj          = subj.name
+        name          = label.name
+        tag           = label.tag
+        is_complement = label.is_complement
+      }
+    ]
+  ])
+}
+
+resource "aci_rest_managed" "vzProvSubjLbl" {
+  for_each = { for label in local.provided_labels_list : label.name => label }
+  dn = "${aci_rest_managed.vzSubj[each.value.subj].dn}/provsubjlbl-${each.value.name}"
+  class_name = "vzProvSubjLbl"
+
+  content = {
+    name = each.value.name
+    tag = each.value.tag
+    isComplement = each.value.is_complement == true ? "yes" : "no"
+  }
+}
+
+locals {
+  consumed_labels_list = flatten([
+    for subj in var.subjects : [
+      for label in coalesce(subj.consumed_labels, []) : {
+        subj          = subj.name
+        name          = label.name
+        tag           = label.tag
+        is_complement = label.is_complement
+      }
+    ]
+  ])
+}
+
+resource "aci_rest_managed" "vzConsSubjLbl" {
+  for_each = { for label in local.consumed_labels_list : label.name => label }
+  dn = "${aci_rest_managed.vzSubj[each.value.subj].dn}/conssubjlbl-${each.value.name}"
+  class_name = "vzConsSubjLbl"
+
+  content = {
+    name = each.value.name
+    tag = each.value.tag
+    isComplement = each.value.is_complement == true ? "yes" : "no"
   }
 }

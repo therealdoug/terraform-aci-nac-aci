@@ -415,20 +415,20 @@ locals {
             to              = try(ap.to, "")
           }]
           provided_epg_labels = [for label in try(epg.provided_epg_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.provided_epg_labels.name_suffix}"
             tag = label.tag
-            is_complement = try(label.is_complement,"false")
+            is_complement = try(label.is_complement, local.defaults.apic.tenants.application_profiles.endpoint_groups.provided_epg_labels.is_complement)
           }]
           consumed_epg_labels = [for label in try(epg.consumed_epg_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.consumed_epg_labels.name_suffix}"
             tag = label.tag
           }]
           provided_subject_labels = [for label in try(epg.provided_subject_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.provided_subject_labels.name_suffix}"
             tag = label.tag
           }]
           consumed_subject_labels = [for label in try(epg.consumed_subject_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.consumed_subject_labels.name_suffix}"
             tag = label.tag
           }]
         }
@@ -604,20 +604,20 @@ locals {
             to              = try(ap.to, "")
           }]
           provided_useg_epg_labels = [for label in try(useg_epg.provided_useg_epg_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.provided_useg_epg_labels.name_suffix}"
             tag = label.tag
-            is_complement = try(label.is_complement,"false")
+            is_complement = try(label.is_complement, local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.provided_useg_epg_labels.is_complement)
           }]
           consumed_useg_epg_labels = [for label in try(useg_epg.consumed_useg_epg_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.consumed_useg_epg_labels.name_suffix}"
             tag = label.tag
           }]
           provided_subject_labels = [for label in try(useg_epg.provided_subject_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.provided_subject_labels.name_suffix}"
             tag = label.tag
           }]
           consumed_subject_labels = [for label in try(useg_epg.consumed_subject_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.consumed_subject_labels.name_suffix}"
             tag = label.tag
           }]
         }
@@ -715,20 +715,20 @@ locals {
             description = try(sel.description, "")
           }]
           provided_esg_labels = [for label in try(esg.provided_esg_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.provided_esg_labels.name_suffix}"
             tag = label.tag
-            is_complement = try(label.is_complement,"false")
+            is_complement = try(label.is_complement, local.defaults.apic.tenants.application_profiles.endpoint_security_groups.provided_esg_labels.is_complement)
           }]
           consumed_esg_labels = [for label in try(esg.consumed_esg_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.consumed_esg_labels.name_suffix}"
             tag = label.tag
           }]
           provided_subject_labels = [for label in try(esg.provided_subject_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.provided_subject_labels.name_suffix}"
             tag = label.tag
           }]
           consumed_subject_labels = [for label in try(esg.consumed_subject_labels,[]) : {
-            name = label.name
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.consumed_subject_labels.name_suffix}"
             tag = label.tag
           }]
         }
@@ -1856,6 +1856,8 @@ locals {
           service_graph = try("${subject.service_graph}${local.defaults.apic.tenants.services.service_graph_templates.name_suffix}", null)
           qos_class     = try(subject.qos_class, local.defaults.apic.tenants.contracts.subjects.qos_class)
           target_dscp   = try(subject.target_dscp, local.defaults.apic.tenants.contracts.subjects.target_dscp)
+          provided_label_match = try(subject.provided_label_match, local.defaults.apic.tenants.contracts.subjects.provided_label_match)
+          consumed_label_match = try(subject.consumed_label_match, local.defaults.apic.tenants.contracts.subjects.consumed_label_match)
           filters = [for filter in try(subject.filters, []) : {
             filter   = "${filter.filter}${local.defaults.apic.tenants.filters.name_suffix}"
             action   = try(filter.action, local.defaults.apic.tenants.contracts.subjects.filters.action)
@@ -1863,15 +1865,15 @@ locals {
             log      = try(filter.log, local.defaults.apic.tenants.contracts.subjects.filters.log)
             no_stats = try(filter.no_stats, local.defaults.apic.tenants.contracts.subjects.filters.no_stats)
           }]
-          provided_filters = [for label in try(subject.provided_labels, {}) : {
-            name = label.name
+          provided_labels = [for label in try(subject.provided_labels, []) : {
+            name = "${label.name}${local.defaults.apic.tenants.contracts.subjects.provided_labels.name_suffix}"
             tag = label.tag
-            is_complement = try(label.is_complement,false)
+            is_complement = try(label.is_complement,local.defaults.apic.tenants.contracts.subjects.provided_labels.is_complement)
           }]
-          consumed_filters = [for label in try(subject.consumed_labels, {}) : {
-            name = label.name
+          consumed_labels = [for label in try(subject.consumed_labels, []) : {
+            name = "${label.name}${local.defaults.apic.tenants.contracts.subjects.consumed_labels.name_suffix}"
             tag = label.tag
-            is_complement = try(label.is_complement,false)
+            is_complement = try(label.is_complement, local.defaults.apic.tenants.contracts.subjects.consumed_labels.is_complement)
           }]
         }]
       }

@@ -526,7 +526,6 @@ resource "aci_rest_managed" "vzProvSubjLbl" {
   content = {
     name = each.value.name
     tag = each.value.tag
-    isComplement = each.value.is_complement == true ? "yes" : "no"
   }
 }
 
