@@ -981,6 +981,15 @@ defaults:
             route_control_profiles:
               name_suffix: ""
               direction: import
+          consumed_subject_labels:
+            name_suffix: ""
+          provided_subject_labels:
+            name_suffix: ""
+          consumed_epg_labels:
+            name_suffix: ""
+          provided_epg_labels:
+            name_suffix: ""
+            is_complement: false
         import_route_map:
           type: global
           contexts:

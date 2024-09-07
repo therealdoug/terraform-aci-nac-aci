@@ -1528,6 +1528,23 @@ locals {
               direction = try(rcp.direction, local.defaults.apic.tenants.l3outs.external_endpoint_groups.subnets.route_control_profiles.direction)
             }]
           }]
+          provided_epg_labels = [for label in try(epg.provided_epg_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.provided_epg_labels.name_suffix}"
+            tag = label.tag
+            is_complement = try(label.is_complement, local.defaults.apic.tenants.l3outs.external_endpoint_groups.provided_epg_labels.is_complement)
+          }]
+          consumed_epg_labels = [for label in try(epg.consumed_epg_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.consumed_epg_labels.name_suffix}"
+            tag = label.tag
+          }]
+          provided_subject_labels = [for label in try(epg.provided_subject_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.provided_subject_labels.name_suffix}"
+            tag = label.tag
+          }]
+          consumed_subject_labels = [for label in try(epg.consumed_subject_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.consumed_subject_labels.name_suffix}"
+            tag = label.tag
+          }]
         }
       ]
     ]
@@ -1552,6 +1569,10 @@ module "aci_external_endpoint_group" {
   contract_imported_consumers = each.value.contract_imported_consumers
   route_control_profiles      = each.value.route_control_profiles
   subnets                     = each.value.subnets
+  consumed_epg_labels         = each.value.consumed_epg_labels
+  provided_epg_labels         = each.value.provided_epg_labels
+  consumed_subject_labels     = each.value.consumed_subject_labels
+  provided_subject_labels     = each.value.provided_subject_labels
 
   depends_on = [
     module.aci_tenant,
