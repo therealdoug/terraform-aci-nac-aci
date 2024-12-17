@@ -78,13 +78,13 @@ locals {
 }
 
 resource "aci_rest_managed" "vzProvSubjLbl" {
-  for_each = { for label in local.provider_labels_list : label.name => label }
-  dn = "${aci_rest_managed.vzSubj[each.value.subj].dn}/provsubjlbl-${each.value.name}"
+  for_each   = { for label in local.provider_labels_list : label.name => label }
+  dn         = "${aci_rest_managed.vzSubj[each.value.subj].dn}/provsubjlbl-${each.value.name}"
   class_name = "vzProvSubjLbl"
 
   content = {
-    name = each.value.name
-    tag = each.value.tag
+    name         = each.value.name
+    tag          = each.value.tag
     isComplement = each.value.is_complement == true ? "yes" : "no"
   }
 }
@@ -103,13 +103,13 @@ locals {
 }
 
 resource "aci_rest_managed" "vzConsSubjLbl" {
-  for_each = { for label in local.consumer_labels_list : label.name => label }
-  dn = "${aci_rest_managed.vzSubj[each.value.subj].dn}/conssubjlbl-${each.value.name}"
+  for_each   = { for label in local.consumer_labels_list : label.name => label }
+  dn         = "${aci_rest_managed.vzSubj[each.value.subj].dn}/conssubjlbl-${each.value.name}"
   class_name = "vzConsSubjLbl"
 
   content = {
-    name = each.value.name
-    tag = each.value.tag
+    name         = each.value.name
+    tag          = each.value.tag
     isComplement = each.value.is_complement == true ? "yes" : "no"
   }
 }

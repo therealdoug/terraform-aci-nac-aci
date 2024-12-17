@@ -175,6 +175,10 @@ module "aci_vrf" {
 | <a name="input_pim_igmp_ssm_translate_policies"></a> [pim\_igmp\_ssm\_translate\_policies](#input\_pim\_igmp\_ssm\_translate\_policies) | VRF IGMP SSM tranlate policies. | <pre>list(object({<br>    group_prefix   = string<br>    source_address = string<br>  }))</pre> | `[]` | no |
 | <a name="input_leaked_internal_prefixes"></a> [leaked\_internal\_prefixes](#input\_leaked\_internal\_prefixes) | List of leaked internal prefixes. Default value `public`: false. | <pre>list(object({<br>    prefix = string<br>    public = optional(bool, false)<br>    destinations = optional(list(object({<br>      description = optional(string, "")<br>      tenant      = string<br>      vrf         = string<br>      public      = optional(bool)<br>    })), [])<br>  }))</pre> | `[]` | no |
 | <a name="input_leaked_external_prefixes"></a> [leaked\_external\_prefixes](#input\_leaked\_external\_prefixes) | List of leaked external prefixes. | <pre>list(object({<br>    prefix             = string<br>    from_prefix_length = optional(number)<br>    to_prefix_length   = optional(number)<br>    destinations = optional(list(object({<br>      description = optional(string, "")<br>      tenant      = string<br>      vrf         = string<br>    })), [])<br>  }))</pre> | `[]` | no |
+| <a name="input_provider_subject_labels"></a> [provider\_subject\_labels](#input\_provider\_subject\_labels) | List of vzAny Subject Label Providers. | <pre>list(object({<br>    name          = string<br>    tag           = string<br>    is_complement = bool<br>  }))</pre> | `[]` | no |
+| <a name="input_consumer_subject_labels"></a> [consumer\_subject\_labels](#input\_consumer\_subject\_labels) | List of vzAny Subject Label Consumers. | <pre>list(object({<br>    name          = string<br>    tag           = string<br>    is_complement = bool<br>  }))</pre> | `[]` | no |
+| <a name="input_provider_epg_labels"></a> [provider\_epg\_labels](#input\_provider\_epg\_labels) | List of vzAny EPG Label Providers. | <pre>list(object({<br>    name          = string<br>    tag           = string<br>    is_complement = bool<br>  }))</pre> | `[]` | no |
+| <a name="input_consumer_epg_labels"></a> [consumer\_epg\_labels](#input\_consumer\_epg\_labels) | List of vzAny EPG Label Consumers. | <pre>list(object({<br>    name = string<br>    tag  = string<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 
@@ -238,6 +242,10 @@ module "aci_vrf" {
 | [aci_rest_managed.rtdmcRsFilterToRtMapPol_ssm_range](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.rtdmcRsFilterToRtMapPol_static_rp](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vzAny](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.vzConsLbl](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.vzConsSubjLbl](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.vzProvLbl](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.vzProvSubjLbl](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vzRsAnyToCons](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vzRsAnyToConsIf](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vzRsAnyToProv](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |

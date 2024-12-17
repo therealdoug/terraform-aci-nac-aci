@@ -72,6 +72,10 @@ module "aci_external_endpoint_group" {
 | <a name="input_contract_consumers"></a> [contract\_consumers](#input\_contract\_consumers) | List of contract consumers. | `list(string)` | `[]` | no |
 | <a name="input_contract_providers"></a> [contract\_providers](#input\_contract\_providers) | List of contract providers. | `list(string)` | `[]` | no |
 | <a name="input_contract_imported_consumers"></a> [contract\_imported\_consumers](#input\_contract\_imported\_consumers) | List of imported contract consumers. | `list(string)` | `[]` | no |
+| <a name="input_provider_subject_labels"></a> [provider\_subject\_labels](#input\_provider\_subject\_labels) | List of Provider subject labels. | <pre>list(object({<br>    name = string<br>    tag  = string<br>  }))</pre> | `[]` | no |
+| <a name="input_consumer_subject_labels"></a> [consumer\_subject\_labels](#input\_consumer\_subject\_labels) | List of Consumer subject labels. | <pre>list(object({<br>    name = string<br>    tag  = string<br>  }))</pre> | `[]` | no |
+| <a name="input_provider_epg_labels"></a> [provider\_epg\_labels](#input\_provider\_epg\_labels) | List of Provider EPG labels. | <pre>list(object({<br>    name          = string<br>    tag           = string<br>    is_complement = optional(bool, false)<br>  }))</pre> | `[]` | no |
+| <a name="input_consumer_epg_labels"></a> [consumer\_epg\_labels](#input\_consumer\_epg\_labels) | List of Consumer EPG labels. | <pre>list(object({<br>    name = string<br>    tag  = string<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 
@@ -92,4 +96,8 @@ module "aci_external_endpoint_group" {
 | [aci_rest_managed.l3extRsSubnetToProfile](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.l3extRsSubnetToRtSumm](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.l3extSubnet](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.vzConsLbl](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.vzConsSubjLbl](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.vzProvLbl](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.vzProvSubjLbl](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 <!-- END_TF_DOCS -->

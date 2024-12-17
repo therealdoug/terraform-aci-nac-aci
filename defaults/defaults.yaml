@@ -1119,13 +1119,17 @@ defaults:
               end_ip: 0.0.0.0
           consumer_subject_labels:
             name_suffix: ""
+            tag: black
           provider_subject_labels:
             name_suffix: ""
+            tag: black
           provider_useg_epg_labels:
             name_suffix: ""
+            tag: black
             is_complement: false
           consumer_useg_epg_labels:
             name_suffix: ""
+            tag: black
         endpoint_security_groups:
           name_suffix: ""
           shutdown: false
@@ -1135,13 +1139,17 @@ defaults:
             operator: equals
           consumer_subject_labels:
             name_suffix: ""
+            tag: black
           provider_subject_labels:
             name_suffix: ""
+            tag: black
           provider_esg_labels:
             name_suffix: ""
+            tag: black
             is_complement: false
           consumer_esg_labels:
             name_suffix: ""
+            tag: black
       inb_endpoint_groups:
         name_suffix: ""
       oob_endpoint_groups:
