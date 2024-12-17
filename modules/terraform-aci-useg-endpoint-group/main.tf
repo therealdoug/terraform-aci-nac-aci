@@ -300,7 +300,7 @@ resource "aci_rest_managed" "fvnsUcastAddrBlk" {
 
 
 resource "aci_rest_managed" "vzProvLbl" {
-  for_each = { for label in var.provided_useg_epg_labels : label.name => label }
+  for_each = { for label in var.provider_useg_epg_labels : label.name => label }
   dn = "${aci_rest_managed.fvAEPg.dn}/provlbl-${each.value.name}"
   class_name = "vzProvLbl"
   content = {
@@ -311,7 +311,7 @@ resource "aci_rest_managed" "vzProvLbl" {
 }
 
 resource "aci_rest_managed" "vzConsLbl" {
-  for_each = { for label in var.consumed_useg_epg_labels : label.name => label }
+  for_each = { for label in var.consumer_useg_epg_labels : label.name => label }
   dn = "${aci_rest_managed.fvAEPg.dn}/conslbl-${each.value.name}"
   class_name = "vzConsLbl"
   content = {
@@ -321,7 +321,7 @@ resource "aci_rest_managed" "vzConsLbl" {
 }
 
 resource "aci_rest_managed" "vzProvSubjLbl" {
-  for_each = { for label in var.provided_subject_labels : label.name => label }
+  for_each = { for label in var.provider_subject_labels : label.name => label }
   dn = "${aci_rest_managed.fvAEPg.dn}/provsubjlbl-${each.value.name}"
   class_name = "vzProvSubjLbl"
   content = {
@@ -331,7 +331,7 @@ resource "aci_rest_managed" "vzProvSubjLbl" {
 }
 
 resource "aci_rest_managed" "vzConsSubjLbl" {
-  for_each = { for label in var.consumed_subject_labels : label.name => label }
+  for_each = { for label in var.consumer_subject_labels : label.name => label }
   dn = "${aci_rest_managed.fvAEPg.dn}/conssubjlbl-${each.value.name}"
   class_name = "vzConsSubjLbl"
   content = {

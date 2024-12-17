@@ -94,6 +94,25 @@ locals {
             vrf         = dest.vrf
           }]
         }]
+        provider_subject_labels = [for label in try(vrf.subject_labels.providers, []) : {
+          name = "${label.name}${local.defaults.apic.tenants.vrfs.provider_subject_labels.name_suffix}"
+          tag = try(label.tag, local.defaults.apic.tenants.vrfs.provider_subject_labels.tag)
+          is_complement = try(label.is_complement, local.defaults.apic.tenants.vrfs.provider_subject_labels.is_complement)
+        }]
+        consumer_subject_labels = [for label in try(vrf.subject_labels.consumers, []) : {
+          name = "${label.name}${local.defaults.apic.tenants.vrfs.consumer_subject_labels.name_suffix}"
+          tag = try(label.tag, local.defaults.apic.tenants.vrfs.consumer_subject_labels.tag)
+          is_complement = try(label.is_complement, local.defaults.apic.tenants.vrfs.consumer_subject_labels.is_complement)
+        }]
+        provider_epg_labels = [for label in try(vrf.epg_labels.providers, []) : {
+          name = "${label.name}${local.defaults.apic.tenants.vrfs.provider_epg_labels.name_suffix}"
+          tag = try(label.tag, local.defaults.apic.tenants.vrfs.provider_epg_labels.tag)
+          is_complement = try(label.is_complement, local.defaults.apic.tenants.vrfs.provider_epg_labels.is_complement)
+        }]
+        consumer_epg_labels = [for label in try(vrf.epg_labels.consumers, []) : {
+          name = "${label.name}${local.defaults.apic.tenants.vrfs.consumer_epg_labels.name_suffix}"
+          tag = try(label.tag, local.defaults.apic.tenants.vrfs.consumer_epg_labels.tag)
+        }]
       }
     ]
   ])
@@ -152,7 +171,11 @@ module "aci_vrf" {
   pim_igmp_ssm_translate_policies          = each.value.pim_igmp_ssm_translate_policies
   leaked_internal_prefixes                 = each.value.leaked_internal_prefixes
   leaked_external_prefixes                 = each.value.leaked_external_prefixes
-
+  provider_subject_labels                  = each.value.provider_subject_labels
+  consumer_subject_labels                  = each.value.consumer_subject_labels
+  provider_epg_labels                      = each.value.provider_epg_labels
+  consumer_epg_labels                      = each.value.consumer_epg_labels
+  
   depends_on = [
     module.aci_tenant,
     module.aci_contract,
@@ -414,21 +437,21 @@ locals {
             from            = try(ap.from, "")
             to              = try(ap.to, "")
           }]
-          provided_epg_labels = [for label in try(epg.provided_epg_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.provided_epg_labels.name_suffix}"
+          provider_epg_labels = [for label in try(epg.provider_epg_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.provider_epg_labels.name_suffix}"
             tag = label.tag
-            is_complement = try(label.is_complement, local.defaults.apic.tenants.application_profiles.endpoint_groups.provided_epg_labels.is_complement)
+            is_complement = try(label.is_complement, local.defaults.apic.tenants.application_profiles.endpoint_groups.provider_epg_labels.is_complement)
           }]
-          consumed_epg_labels = [for label in try(epg.consumed_epg_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.consumed_epg_labels.name_suffix}"
-            tag = label.tag
-          }]
-          provided_subject_labels = [for label in try(epg.provided_subject_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.provided_subject_labels.name_suffix}"
+          consumer_epg_labels = [for label in try(epg.consumer_epg_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.consumer_epg_labels.name_suffix}"
             tag = label.tag
           }]
-          consumed_subject_labels = [for label in try(epg.consumed_subject_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.consumed_subject_labels.name_suffix}"
+          provider_subject_labels = [for label in try(epg.provider_subject_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.provider_subject_labels.name_suffix}"
+            tag = label.tag
+          }]
+          consumer_subject_labels = [for label in try(epg.consumer_subject_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_groups.consumer_subject_labels.name_suffix}"
             tag = label.tag
           }]
         }
@@ -507,10 +530,10 @@ module "aci_endpoint_group" {
   }]
   l4l7_virtual_ips   = each.value.l4l7_virtual_ips
   l4l7_address_pools = each.value.l4l7_address_pools
-  provided_epg_labels = each.value.provided_epg_labels
-  consumed_epg_labels = each.value.consumed_epg_labels
-  provided_subject_labels = each.value.provided_subject_labels
-  consumed_subject_labels = each.value.consumed_subject_labels
+  provider_epg_labels = each.value.provider_epg_labels
+  consumer_epg_labels = each.value.consumer_epg_labels
+  provider_subject_labels = each.value.provider_subject_labels
+  consumer_subject_labels = each.value.consumer_subject_labels
 
   depends_on = [
     module.aci_tenant,
@@ -603,21 +626,21 @@ locals {
             from            = try(ap.from, "")
             to              = try(ap.to, "")
           }]
-          provided_useg_epg_labels = [for label in try(useg_epg.provided_useg_epg_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.provided_useg_epg_labels.name_suffix}"
+          provider_useg_epg_labels = [for label in try(useg_epg.provider_useg_epg_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.provider_useg_epg_labels.name_suffix}"
             tag = label.tag
-            is_complement = try(label.is_complement, local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.provided_useg_epg_labels.is_complement)
+            is_complement = try(label.is_complement, local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.provider_useg_epg_labels.is_complement)
           }]
-          consumed_useg_epg_labels = [for label in try(useg_epg.consumed_useg_epg_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.consumed_useg_epg_labels.name_suffix}"
-            tag = label.tag
-          }]
-          provided_subject_labels = [for label in try(useg_epg.provided_subject_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.provided_subject_labels.name_suffix}"
+          consumer_useg_epg_labels = [for label in try(useg_epg.consumer_useg_epg_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.consumer_useg_epg_labels.name_suffix}"
             tag = label.tag
           }]
-          consumed_subject_labels = [for label in try(useg_epg.consumed_subject_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.consumed_subject_labels.name_suffix}"
+          provider_subject_labels = [for label in try(useg_epg.provider_subject_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.provider_subject_labels.name_suffix}"
+            tag = label.tag
+          }]
+          consumer_subject_labels = [for label in try(useg_epg.consumer_subject_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.useg_endpoint_groups.consumer_subject_labels.name_suffix}"
             tag = label.tag
           }]
         }
@@ -659,10 +682,10 @@ module "aci_useg_endpoint_group" {
     node_id = sl.node_id
   }]
   l4l7_address_pools = each.value.l4l7_address_pools
-  provided_useg_epg_labels = each.value.provided_useg_epg_labels
-  consumed_useg_epg_labels = each.value.consumed_useg_epg_labels
-  provided_subject_labels = each.value.provided_subject_labels
-  consumed_subject_labels = each.value.consumed_subject_labels
+  provider_useg_epg_labels = each.value.provider_useg_epg_labels
+  consumer_useg_epg_labels = each.value.consumer_useg_epg_labels
+  provider_subject_labels = each.value.provider_subject_labels
+  consumer_subject_labels = each.value.consumer_subject_labels
 
   depends_on = [
     module.aci_tenant,
@@ -714,21 +737,21 @@ locals {
             value       = sel.value
             description = try(sel.description, "")
           }]
-          provided_esg_labels = [for label in try(esg.provided_esg_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.provided_esg_labels.name_suffix}"
+          provider_esg_labels = [for label in try(esg.provider_esg_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.provider_esg_labels.name_suffix}"
             tag = label.tag
-            is_complement = try(label.is_complement, local.defaults.apic.tenants.application_profiles.endpoint_security_groups.provided_esg_labels.is_complement)
+            is_complement = try(label.is_complement, local.defaults.apic.tenants.application_profiles.endpoint_security_groups.provider_esg_labels.is_complement)
           }]
-          consumed_esg_labels = [for label in try(esg.consumed_esg_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.consumed_esg_labels.name_suffix}"
-            tag = label.tag
-          }]
-          provided_subject_labels = [for label in try(esg.provided_subject_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.provided_subject_labels.name_suffix}"
+          consumer_esg_labels = [for label in try(esg.consumer_esg_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.consumer_esg_labels.name_suffix}"
             tag = label.tag
           }]
-          consumed_subject_labels = [for label in try(esg.consumed_subject_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.consumed_subject_labels.name_suffix}"
+          provider_subject_labels = [for label in try(esg.provider_subject_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.provider_subject_labels.name_suffix}"
+            tag = label.tag
+          }]
+          consumer_subject_labels = [for label in try(esg.consumer_subject_labels,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.application_profiles.endpoint_security_groups.consumer_subject_labels.name_suffix}"
             tag = label.tag
           }]
         }
@@ -757,10 +780,10 @@ module "aci_endpoint_security_group" {
   tag_selectors               = each.value.tag_selectors
   epg_selectors               = each.value.epg_selectors
   ip_subnet_selectors         = each.value.ip_subnet_selectors
-  provided_esg_labels = each.value.provided_esg_labels
-  consumed_esg_labels = each.value.consumed_esg_labels
-  provided_subject_labels = each.value.provided_subject_labels
-  consumed_subject_labels = each.value.consumed_subject_labels
+  provider_esg_labels = each.value.provider_esg_labels
+  consumer_esg_labels = each.value.consumer_esg_labels
+  provider_subject_labels = each.value.provider_subject_labels
+  consumer_subject_labels = each.value.consumer_subject_labels
 
   depends_on = [
     module.aci_tenant,
@@ -1528,22 +1551,22 @@ locals {
               direction = try(rcp.direction, local.defaults.apic.tenants.l3outs.external_endpoint_groups.subnets.route_control_profiles.direction)
             }]
           }]
-          provided_epg_labels = [for label in try(epg.provided_epg_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.provided_epg_labels.name_suffix}"
-            tag = label.tag
-            is_complement = try(label.is_complement, local.defaults.apic.tenants.l3outs.external_endpoint_groups.provided_epg_labels.is_complement)
+          provider_epg_labels = [for label in try(epg.epg_labels.providers,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.provider_epg_labels.name_suffix}"
+            tag = try(label.tag, local.defaults.apic.tenants.l3outs.external_endpoint_groups.provider_epg_labels.tag)
+            is_complement = try(label.is_complement, local.defaults.apic.tenants.l3outs.external_endpoint_groups.provider_epg_labels.is_complement)
           }]
-          consumed_epg_labels = [for label in try(epg.consumed_epg_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.consumed_epg_labels.name_suffix}"
-            tag = label.tag
+          consumer_epg_labels = [for label in try(epg.epg_labels.consumers,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.consumer_epg_labels.name_suffix}"
+            tag = try(label.tag, local.defaults.apic.tenants.l3outs.external_endpoint_groups.consumer_epg_labels.tag)
           }]
-          provided_subject_labels = [for label in try(epg.provided_subject_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.provided_subject_labels.name_suffix}"
-            tag = label.tag
+          provider_subject_labels = [for label in try(epg.subject_labels.providers,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.provider_subject_labels.name_suffix}"
+            tag = try(label.tag, local.defaults.apic.tenants.l3outs.external_endpoint_groups.provider_subject_labels.tag)
           }]
-          consumed_subject_labels = [for label in try(epg.consumed_subject_labels,[]) : {
-            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.consumed_subject_labels.name_suffix}"
-            tag = label.tag
+          consumer_subject_labels = [for label in try(epg.subject_labels.consumers,[]) : {
+            name = "${label.name}${local.defaults.apic.tenants.l3outs.external_endpoint_groups.consumer_subject_labels.name_suffix}"
+            tag = try(label.tag, local.defaults.apic.tenants.l3outs.external_endpoint_groups.consumer_subject_labels.tag)
           }]
         }
       ]
@@ -1569,10 +1592,14 @@ module "aci_external_endpoint_group" {
   contract_imported_consumers = each.value.contract_imported_consumers
   route_control_profiles      = each.value.route_control_profiles
   subnets                     = each.value.subnets
-  consumed_epg_labels         = each.value.consumed_epg_labels
-  provided_epg_labels         = each.value.provided_epg_labels
-  consumed_subject_labels     = each.value.consumed_subject_labels
-  provided_subject_labels     = each.value.provided_subject_labels
+  consumer_epg_labels         = each.value.consumer_epg_labels
+  provider_epg_labels         = each.value.provider_epg_labels
+  consumer_subject_labels     = each.value.consumer_subject_labels
+  provider_subject_labels     = each.value.provider_subject_labels
+  # consumer_epg_labels         = each.value.epg_labels.consumers
+  # provider_epg_labels         = each.value.epg_labels.providers
+  # consumer_subject_labels     = each.value.subject_labels.consumers
+  # provider_subject_labels     = each.value.subject_labels.providers
 
   depends_on = [
     module.aci_tenant,
@@ -1877,8 +1904,8 @@ locals {
           service_graph = try("${subject.service_graph}${local.defaults.apic.tenants.services.service_graph_templates.name_suffix}", null)
           qos_class     = try(subject.qos_class, local.defaults.apic.tenants.contracts.subjects.qos_class)
           target_dscp   = try(subject.target_dscp, local.defaults.apic.tenants.contracts.subjects.target_dscp)
-          provided_label_match = try(subject.provided_label_match, local.defaults.apic.tenants.contracts.subjects.provided_label_match)
-          consumed_label_match = try(subject.consumed_label_match, local.defaults.apic.tenants.contracts.subjects.consumed_label_match)
+          provider_label_match = try(subject.provider_label_match, local.defaults.apic.tenants.contracts.subjects.provider_label_match)
+          consumer_label_match = try(subject.consumer_label_match, local.defaults.apic.tenants.contracts.subjects.consumer_label_match)
           filters = [for filter in try(subject.filters, []) : {
             filter   = "${filter.filter}${local.defaults.apic.tenants.filters.name_suffix}"
             action   = try(filter.action, local.defaults.apic.tenants.contracts.subjects.filters.action)
@@ -1886,15 +1913,15 @@ locals {
             log      = try(filter.log, local.defaults.apic.tenants.contracts.subjects.filters.log)
             no_stats = try(filter.no_stats, local.defaults.apic.tenants.contracts.subjects.filters.no_stats)
           }]
-          provided_labels = [for label in try(subject.provided_labels, []) : {
-            name = "${label.name}${local.defaults.apic.tenants.contracts.subjects.provided_labels.name_suffix}"
-            tag = label.tag
-            is_complement = try(label.is_complement,local.defaults.apic.tenants.contracts.subjects.provided_labels.is_complement)
+          provider_labels = [for label in try(subject.labels.providers, []) : {
+            name = "${label.name}${local.defaults.apic.tenants.contracts.subjects.provider_labels.name_suffix}"
+            tag = try(label.tag, local.defaults.apic.tenants.contracts.subjects.provider_labels.tag)
+            is_complement = try(label.is_complement, local.defaults.apic.tenants.contracts.subjects.provider_labels.is_complement)
           }]
-          consumed_labels = [for label in try(subject.consumed_labels, []) : {
-            name = "${label.name}${local.defaults.apic.tenants.contracts.subjects.consumed_labels.name_suffix}"
-            tag = label.tag
-            is_complement = try(label.is_complement, local.defaults.apic.tenants.contracts.subjects.consumed_labels.is_complement)
+          consumer_labels = [for label in try(subject.labels.consumers, []) : {
+            name = "${label.name}${local.defaults.apic.tenants.contracts.subjects.consumer_labels.name_suffix}"
+            tag = try(label.tag, local.defaults.apic.tenants.contracts.subjects.consumer_labels.tag)
+            is_complement = try(label.is_complement, local.defaults.apic.tenants.contracts.subjects.consumer_labels.is_complement)
           }]
         }]
       }

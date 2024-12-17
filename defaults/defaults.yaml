@@ -779,6 +779,22 @@ defaults:
           asm_traffic_registry_max_rate: 65535
           asm_traffic_registry_source_ip: "0.0.0.0"
         preferred_group: false
+        provider_subject_labels:
+          name_suffix: ""
+          tag: black
+          is_complement: false
+        consumer_subject_labels:
+          name_suffix: ""
+          tag: black
+          is_complement: false
+        provider_epg_labels:
+          name_suffix: ""
+          tag: black
+          is_complement: false
+        consumer_epg_labels:
+          name_suffix: ""
+          tag: black
+          is_complement: false
       bridge_domains:
         name_suffix: ""
         ndo_managed: false
@@ -981,14 +997,18 @@ defaults:
             route_control_profiles:
               name_suffix: ""
               direction: import
-          consumed_subject_labels:
+          consumer_subject_labels:
             name_suffix: ""
-          provided_subject_labels:
+            tag: black
+          provider_subject_labels:
             name_suffix: ""
-          consumed_epg_labels:
+            tag: black
+          consumer_epg_labels:
             name_suffix: ""
-          provided_epg_labels:
+            tag: black
+          provider_epg_labels:
             name_suffix: ""
+            tag: black
             is_complement: false
         import_route_map:
           type: global
@@ -1060,13 +1080,13 @@ defaults:
               name_suffix: ""
               start_ip: 0.0.0.0
               end_ip: 0.0.0.0
-          consumed_subject_labels:
+          consumer_subject_labels:
             name_suffix: ""
-          provided_subject_labels:
+          provider_subject_labels:
             name_suffix: ""
-          consumed_epg_labels:
+          consumer_epg_labels:
             name_suffix: ""
-          provided_epg_labels:
+          provider_epg_labels:
             name_suffix: ""
             is_complement: false
         useg_endpoint_groups:
@@ -1097,14 +1117,14 @@ defaults:
               name_suffix: ""
               start_ip: 0.0.0.0
               end_ip: 0.0.0.0
-          consumed_subject_labels:
+          consumer_subject_labels:
             name_suffix: ""
-          provided_subject_labels:
+          provider_subject_labels:
             name_suffix: ""
-          provided_useg_epg_labels:
+          provider_useg_epg_labels:
             name_suffix: ""
             is_complement: false
-          consumed_useg_epg_labels:
+          consumer_useg_epg_labels:
             name_suffix: ""
         endpoint_security_groups:
           name_suffix: ""
@@ -1113,14 +1133,14 @@ defaults:
           preferred_group: false
           tag_selectors:
             operator: equals
-          consumed_subject_labels:
+          consumer_subject_labels:
             name_suffix: ""
-          provided_subject_labels:
+          provider_subject_labels:
             name_suffix: ""
-          provided_esg_labels:
+          provider_esg_labels:
             name_suffix: ""
             is_complement: false
-          consumed_esg_labels:
+          consumer_esg_labels:
             name_suffix: ""
       inb_endpoint_groups:
         name_suffix: ""
@@ -1179,12 +1199,12 @@ defaults:
             priority: default
             log: false
             no_stats: false
-          consumed_label_match: AtleastOne
-          provided_label_match: AtleastOne
-          provided_labels:
+          consumer_label_match: AtleastOne
+          provider_label_match: AtleastOne
+          provider_labels:
             name_suffix: ""
             is_complement: false
-          consumed_labels:
+          consumer_labels:
             name_suffix: ""
             is_complement: false
       imported_contracts:
